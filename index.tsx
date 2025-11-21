@@ -12,7 +12,7 @@ import {
   FileImage, FileType, Check, PieChart as PieChartIcon
 } from 'lucide-react';
 import html2canvas from 'html2canvas';
-import { jsPDF } from 'jspdf';
+import jsPDF from 'jspdf';
 
 // --- Types ---
 
@@ -79,6 +79,17 @@ const Button = ({ onClick, children, variant = 'primary', icon: Icon, className 
     </button>
   );
 };
+
+const SidebarItem = ({ active, onClick, icon: Icon, label }: any) => (
+  <button 
+    onClick={onClick}
+    className={`w-full flex items-center justify-center lg:justify-start gap-3 px-3 py-3 rounded-xl transition-all duration-200 ${active ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/50' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'} no-print`}
+  >
+    <Icon size={22} strokeWidth={active ? 2.5 : 2} />
+    <span className={`hidden lg:block font-medium ${active ? 'font-bold' : ''}`}>{label}</span>
+    {active && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white hidden lg:block shadow-lg" />}
+  </button>
+);
 
 const PinPad = ({ target, onUnlock, onCancel }: { target: string; onUnlock: () => void; onCancel: () => void }) => {
   const [pin, setPin] = useState("");
@@ -153,6 +164,8 @@ const StatCard = ({ title, value, subtext, icon: Icon, color }: any) => (
   </Card>
 );
 
+// --- Views ---
+
 const DashboardView = ({ data }: { data: MaterialRecord[] }) => {
   const [timePeriod, setTimePeriod] = useState<'trimestre' | 'semestre' | 'anual'>('anual');
   
@@ -200,20 +213,6 @@ const DashboardView = ({ data }: { data: MaterialRecord[] }) => {
         {value}
       </text>
     );
-  };
-
-  // Customized label for Pie Chart
-  const RADIAN = Math.PI / 180;
-  const renderCustomizedPieLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index, name }: any) => {
-     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-     // Only show text inside if slice is big enough
-     if (percent < 0.1) return null;
-     
-     return (
-       <text x={cx} y={cy} fill="white" textAnchor="middle" dominantBaseline="central" fontSize={10} fontWeight="bold">
-         {`${(percent * 100).toFixed(0)}%`}
-       </text>
-     );
   };
 
   return (
@@ -1733,17 +1732,6 @@ const App = () => {
     </div>
   );
 };
-
-const SidebarItem = ({ active, onClick, icon: Icon, label }: any) => (
-  <button 
-    onClick={onClick}
-    className={`w-full flex items-center justify-center lg:justify-start gap-3 px-3 py-3 rounded-xl transition-all duration-200 ${active ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/50' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'} no-print`}
-  >
-    <Icon size={22} strokeWidth={active ? 2.5 : 2} />
-    <span className={`hidden lg:block font-medium ${active ? 'font-bold' : ''}`}>{label}</span>
-    {active && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white hidden lg:block shadow-lg" />}
-  </button>
-);
 
 const root = createRoot(document.getElementById('root')!);
 root.render(<App />);
