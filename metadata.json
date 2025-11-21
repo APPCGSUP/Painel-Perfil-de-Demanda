@@ -1,0 +1,5 @@
+{
+  "description": "Demand Forecast System with tiered auth and dashboard analytics.",
+  "requestFramePermissions": [],
+  "name": "App"
+}
